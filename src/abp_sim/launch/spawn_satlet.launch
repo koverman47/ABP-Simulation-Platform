@@ -8,7 +8,7 @@
 	<arg name="robot_name" default="satlet"/>
 
 	<param name="robot_description" 
-		command="$(find xacro)/xacro --inorder '$(find abp_sim)/models/satlet_model/satlet.sdf'"/>
+		command="$(find xacro)/xacro --inorder '$(find abp_sim)/models/satlet_v2/satlet.sdf'"/>
 	
 	<node pkg="gazebo_ros" type="spawn_model" name="spawn_$(arg robot_name)"
 		args="-x $(arg pose_x) -y $(arg pose_y) -z $(arg pose_z) 

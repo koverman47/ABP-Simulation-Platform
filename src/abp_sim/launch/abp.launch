@@ -4,10 +4,6 @@
 
 	<arg name="world_file" default="$(find abp_sim)/worlds/abp.world"/>
 	<arg name="gui" default="true"/>
-	<arg name="pose_x" default="0.0"/>
-	<arg name="pose_y" default="0.0"/>
-	<arg name="pose_z" default="0.0"/>
-	<arg name="pose_yaw" default="0.0"/>
 	<param name="/use_sim_time" value="true"/>
 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -18,27 +14,6 @@
 		<arg name="verbose" value="true"/>
 	</include>
 
-	<group ns="satlet0">
-		<include file="$(find abp_sim)/launch/spawn_satlet.launch">
-			<arg name="pose_x" value="0.0"/>
-			<arg name="robot_name" value="satlet0"/>
-		</include>
-	</group>
-
-
-	<!--<group ns="satlet1">
-		<include file="$(find abp_sim)/launch/spawn_satlet.launch">
-			<arg name="pose_x" value="3.0"/>
-			<arg name="robot_name" value="satlet1"/>
-		</include>
-	</group>
-
-
-	<group ns="satlet2">
-		<include file="$(find abp_sim)/launch/spawn_satlet.launch">
-			<arg name="pose_x" value="-3.0"/>
-			<arg name="robot_name" value="satlet2"/>
-		</include>
-	</group>-->
+	<include file="$(find abp_sim)/launch/spawn.launch"/>
 
 </launch>

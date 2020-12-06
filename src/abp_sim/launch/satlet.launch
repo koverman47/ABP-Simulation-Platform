@@ -6,6 +6,7 @@
 	<arg name="pose_y" default="0.0"/>
 	<arg name="pose_z" default="0.01"/>
 	<arg name="pose_yaw" default="0.0"/>
+	<arg name="delay" default="2.0"/>
 	<arg name="robot_name" default="satlet"/>
 
 	<param name="robot_description" 
@@ -24,6 +25,7 @@
 		type="controller.py" 
 		name="controller_$(arg robot_name)"
 		args="$(arg pose_x) $(arg pose_y) $(arg pose_yaw)"
+		launch-prefix="bash -c 'sleep $(arg delay); $0 $@'"
 		output="screen">
 	</node>
 

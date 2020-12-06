@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+#############################
+# Arg 1 : Number of Satlets
+#
+# Run ./abp -h for help
+#############################
+
+DYNAMICS=false
+BUILD=false
+HELP=false
+
+if [ $# -ge 1 ]
+then
+	for i in "$@"
+	do
+		case $i in
+			-b|--build)
+				BUILD=true
+			;;
+			-d|--dynamics)
+				DYNAMICS=true
+			;;
+			-h|--help)
+				HELP=true
+			;;
+		esac
+	done
+else
+	HELP=true
+fi
+
+if $HELP
+then
+	echo "Usage : ./abp <num_satlets> <options>
+
+Options:
+	-h, --help      : Help string
+	-b, --build     : Build ROS workspace
+	-d, --dynamics  : Use full physics
+"
+else
+	if $DYNAMICS
+	then
+		python generators/generate_satletv2.py $1
+	else
+		python generators/generate_satletv1.py $1
+	fi
+
+	if $BUILD
+	then
+		catkin_make
+		source ../../../devel/setup.bash
+	fi
+	roslaunch abp_sim abp.launch
+fi

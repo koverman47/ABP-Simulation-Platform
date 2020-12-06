@@ -124,6 +124,16 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(abp_sim_pathcheck abp_sim_pathcheck.cpp)
+target_link_libraries(abp_sim_pathcheck ${catkin_LIBRARIES})
+
+add_executable(talker talker.cpp)
+target_link_libraries(talker ${catkin_LIBRARIES})
+
+add_executable(listener listener.cpp)
+target_link_libraries(listener ${catkin_LIBRARIES})
+
+
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/test_pkg.cpp

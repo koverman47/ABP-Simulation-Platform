@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+
+import sys
+import rospy
+import rospkg
+from tf.transformations import euler_from_quaternion
+from std_msgs.msg import Float32MultiArray
+from gazebo_msgs.srv import GetModelState, GetModelStateRequest
+from gazebo_msgs.msg import ModelState
+
+
+desired = [0., 0., 0.]
+state   = [0., 0., 0.]
+kp = 0.75
+
+def state_callback(msg, arg):
+    pass
+
+
+def get_velocity(d, x):
+    global kp
+    v = []
+    for i in range(len(d)):
+        v.append(-kp * (x[i] - d[i]))
+    
+    return v
+
+
+def controller():
+    global state, desired
+
+    name = rospy.get_namespace()
+    rospy.init_node(name[1:-1] + '_controller')
+
+    #state_sub = rospy.Subscriber('/gazebo/model_state', ModelState, state_callback)
+    rospy.wait_for_service('/gazebo/get_model_state')
+    get_model_srv = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
+    model = GetModelStateRequest()
+    model.model_name = name[1:-1]
+
+    cmd_pub = rospy.Publisher(name+'velocity', Float32MultiArray, queue_size=4)
+    cmd = Float32MultiArray()
+    
+    desired[0] = float(sys.argv[1]) + 2
+    desired[1] = float(sys.argv[2]) + 1
+    desired[2] = float(sys.argv[3])
+
+    rate = rospy.Rate(1)
+    while not rospy.is_shutdown():
+        req = get_model_srv(model)
+        rp = req.pose.position
+        ra = req.pose.orientation
+
+        ang = euler_from_quaternion([ra.x, ra.y, ra.z, ra.w])
+        state = [rp.x, rp.y, ang[2]]
+
+        vel = get_velocity(desired, state)
+        vel[0] = min(vel[0], 2, key=abs)
+        vel[1] = min(vel[1], 2, key=abs)
+        vel[2] = min(vel[2], 1, key=abs)
+        cmd.data = vel
+
+        cmd_pub.publish(cmd)
+        rate.sleep()
+
+
+
+if __name__ == "__main__":
+    try:
+        controller()
+    except rospy.ROSInterruptException:
+        pass

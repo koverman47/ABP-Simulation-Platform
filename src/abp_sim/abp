@@ -49,8 +49,9 @@ else
 
 	if $BUILD
 	then
-		catkin_make
-		source ../../../devel/setup.bash
+		#catkin_make
+		catkin build
+		source ../../devel/setup.bash
 	fi
 	roslaunch abp_sim abp.launch
 fi

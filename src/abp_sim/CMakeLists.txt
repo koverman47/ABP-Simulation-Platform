@@ -11,9 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  message_generation
+  gazebo
 )
 
-find_package(gazebo REQUIRED)
 include_directories(${GAZEBO_INCLUDE_DIRS})
 include_directories(${roscpp_INCLUDE_DIRS})
 link_directories(${GAZEBO_LIBRARY_DIRS})
@@ -64,11 +65,10 @@ target_link_libraries(satlet_plugin ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES})
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+   FILES
+   FloatSrv.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -78,10 +78,10 @@ target_link_libraries(satlet_plugin ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES})
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##

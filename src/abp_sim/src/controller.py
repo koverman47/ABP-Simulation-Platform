@@ -7,14 +7,20 @@ from tf.transformations import euler_from_quaternion
 from std_msgs.msg import Float32MultiArray
 from gazebo_msgs.srv import GetModelState, GetModelStateRequest
 from gazebo_msgs.msg import ModelState
+from abp_sim.srv import FloatSrv, FloatSrvResponse
 
 
 desired = [0., 0., 0.]
 state   = [0., 0., 0.]
 kp = 0.75
 
-def state_callback(msg, arg):
-    pass
+def handle_desired(req):
+    global desired
+    desired = req.data
+
+    res = FloatSrvResponse()
+    res.rec = True
+    return res
 
 
 def get_velocity(d, x):
@@ -35,14 +41,15 @@ def controller():
     #state_sub = rospy.Subscriber('/gazebo/model_state', ModelState, state_callback)
     rospy.wait_for_service('/gazebo/get_model_state')
     get_model_srv = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
+    rospy.Service(name+'desired', FloatSrv, handle_desired) 
     model = GetModelStateRequest()
     model.model_name = name[1:-1]
 
     cmd_pub = rospy.Publisher(name+'velocity', Float32MultiArray, queue_size=4)
     cmd = Float32MultiArray()
     
-    desired[0] = float(sys.argv[1]) + 2
-    desired[1] = float(sys.argv[2]) + 1
+    desired[0] = float(sys.argv[1])
+    desired[1] = float(sys.argv[2])
     desired[2] = float(sys.argv[3])
 
     rate = rospy.Rate(1)

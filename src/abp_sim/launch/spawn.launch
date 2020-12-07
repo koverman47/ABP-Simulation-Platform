@@ -24,4 +24,13 @@
 			<arg name="robot_name" value="satlet1"/>
 		</include>
 	</group>
+	<group ns="satlet2">
+		<include file="$(find abp_sim)/launch/satlet.launch">
+			<arg name="pose_x" value="2"/>
+			<arg name="pose_y" value="$(arg pose_y)"/>
+			<arg name="pose_z" value="$(arg pose_z)"/>
+			<arg name="pose_yaw" value="$(arg pose_yaw)"/>
+			<arg name="robot_name" value="satlet2"/>
+		</include>
+	</group>
 </launch>

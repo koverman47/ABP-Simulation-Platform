@@ -49,7 +49,6 @@ else
 
 	if $BUILD
 	then
-		#catkin_make
 		catkin build
 		source ../../devel/setup.bash
 	fi

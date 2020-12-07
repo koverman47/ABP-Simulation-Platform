@@ -36,7 +36,8 @@ source ~/.bashrc
 
 ## Running a Toy Simulation
 ```bash
-roslaunch abp_sim abp.launch
+cd src/abp_sim/
+./abp 3 --build
 ```
 If everything is installed properly, you should initially see three floatboats at rest as seen in the above image.
 

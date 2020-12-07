@@ -31,8 +31,9 @@ for i in range(len(truth)):
 
 
 plt.plot(range(len(truth)), mse)
+plt.ylim(ymin=0, ymax=2.5)
 plt.xlabel('Time')
-plt.ylabel('Distance Error')
-plt.title('Distance Error')
+plt.ylabel('Distance')
+plt.title('Spacing')
 plt.show()
 f.close()

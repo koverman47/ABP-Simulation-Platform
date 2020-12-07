@@ -50,7 +50,11 @@ class Planner():
 
 
     def distance(self, u, v):
-        return sqrt((u[0] - v[0])**2 + (u[1] - v[1])**2)
+        #return sqrt((u[0] - v[0])**2 + (u[1] - v[1])**2)
+        x = u[0] - v[0]
+        y = u[1] - v[1]
+        yaw = u[2] - v[2]
+        return sqrt(x**2 + y**2 + yaw**2)
     
     def model_distance(self, u, v):
         d1 = abs(u[0] - v[0]) - 1
@@ -68,7 +72,7 @@ class Planner():
         off_yaw = float(sys.argv[3])
         desired = [off_x, off_y, off_yaw]
 
-        waypoints = waypoints = []
+        waypoints = []
         waypoints.append([0., 0., 0.])
         waypoints.append([4., 0., 1.])
         waypoints.append([3., 2., 3.141592654])

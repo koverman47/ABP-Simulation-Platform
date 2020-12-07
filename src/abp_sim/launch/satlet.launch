@@ -7,24 +7,32 @@
 	<arg name="pose_z" default="0.01"/>
 	<arg name="pose_yaw" default="0.0"/>
 	<arg name="delay" default="2.0"/>
-	<arg name="robot_name" default="satlet"/>
+	<arg name="robot_id" default="0"/>
 
 	<param name="robot_description" 
 		command="$(find xacro)/xacro --inorder '$(find abp_sim)/models/satlet_v1/satlet.sdf'"/>
 	
-	<node pkg="gazebo_ros" type="spawn_model" name="spawn_$(arg robot_name)"
+	<node pkg="gazebo_ros" type="spawn_model" name="spawn_satlet$(arg robot_id)"
 		args="-x $(arg pose_x) -y $(arg pose_y) -z $(arg pose_z) 
 			-unpause 
 			-sdf 
 			-param robot_description 
-			-model $(arg robot_name)" 
+			-model satlet$(arg robot_id)" 
 		respawn="false">
 	</node>
 
 	<node pkg="abp_sim" 
 		type="controller.py" 
-		name="controller_$(arg robot_name)"
+		name="controller_satlet$(arg robot_id)"
 		args="$(arg pose_x) $(arg pose_y) $(arg pose_yaw)"
+		launch-prefix="bash -c 'sleep $(arg delay); $0 $@'"
+		output="screen">
+	</node>
+
+	<node pkg="abp_sim"
+		type="planner.py"
+		name="planner_satlet$(arg robot_id)"
+		args="$(arg pose_x) $(arg pose_y) $(arg pose_yaw) $(arg robot_id)"
 		launch-prefix="bash -c 'sleep $(arg delay); $0 $@'"
 		output="screen">
 	</node>

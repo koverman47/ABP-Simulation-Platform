@@ -52,7 +52,7 @@ def controller():
     desired[1] = float(sys.argv[2])
     desired[2] = float(sys.argv[3])
 
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(20)
     while not rospy.is_shutdown():
         req = get_model_srv(model)
         rp = req.pose.position

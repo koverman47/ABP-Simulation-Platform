@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import matplotlib.pyplot as plt
+from math import sqrt
 
 f = open('../logs/states.log', 'r')
 
@@ -16,7 +17,6 @@ for line in f:
     elif l[4] == 'e':
         estimate.append(l[1:3])
 
-print(truth)
 for i in range(len(truth)):
     for j in range(2):
         truth[i][j] = float(truth[i][j])
@@ -24,13 +24,10 @@ for i in range(len(truth)):
 
 mse = []
 for i in range(len(truth)):
-    epx = abs(truth[i][0] - estimate[i][0])
-    epy = abs(truth[i][1] - estimate[i][1])
-    #evx = abs(truth[i][2] - estimate[i][2])
-    #evy = abs(truth[i][3] - estimate[i][3])
+    epx = abs(truth[i][0] - estimate[i][0]) - 1
+    epy = abs(truth[i][1] - estimate[i][1]) - 1
 
-    #mse.append(epx**2 + epy**2 + evx**2 + evy**2)
-    mse.append(epx**2 + epy**2)
+    mse.append(sqrt(epx**2 + epy**2))
 
 
 plt.plot(range(len(truth)), mse)

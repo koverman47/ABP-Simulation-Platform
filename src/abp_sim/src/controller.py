@@ -18,6 +18,7 @@ def handle_desired(req):
     global desired
     desired = req.data
 
+    print(desired)
     res = FloatSrvResponse()
     res.rec = True
     return res
@@ -62,10 +63,15 @@ def controller():
         state = [rp.x, rp.y, ang[2]]
 
         vel = get_velocity(desired, state)
-        vel[0] = min(vel[0], 2, key=abs)
-        vel[1] = min(vel[1], 2, key=abs)
-        vel[2] = min(vel[2], 1, key=abs)
+        alt = []
+        alt.append(2 * vel[0] / abs(vel[0]) if vel[0] else 0.)
+        alt.append(2 * vel[1] / abs(vel[1]) if vel[1] else 0.)
+        alt.append(1 * vel[2] / abs(vel[2]) if vel[2] else 0.)
+        vel[0] = min(vel[0], alt[0], key=abs)
+        vel[1] = min(vel[1], alt[1], key=abs)
+        vel[2] = min(vel[2], alt[2], key=abs)
         cmd.data = vel
+        print(vel)
 
         cmd_pub.publish(cmd)
         rate.sleep()

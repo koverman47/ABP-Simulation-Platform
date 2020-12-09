@@ -3,7 +3,7 @@
 import sys
 import rospy
 import rospkg
-from math import sqrt
+from math import sqrt, cos, sin
 from tf.transformations import euler_from_quaternion
 from gazebo_msgs.srv import GetModelState, GetModelStateRequest
 from gazebo_msgs.msg import ModelStates
@@ -27,8 +27,6 @@ class Planner():
         self.name = name[1:-1]
         rospy.init_node(self.name + '_planner')
 
-        #rospy.wait_for_service('/gazebo/get_model_state')
-        #self.get_model_srv = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
         self.sub = rospy.Subscriber('/gazebo/model_states', ModelStates, self.state_callback)
         rospy.wait_for_service('/'+name+'/desired')
         self.des_srv = rospy.ServiceProxy('/'+name+'/desired', DesiredCoords)
@@ -73,28 +71,42 @@ class Planner():
         desired = [off_x, off_y, off_yaw]
 
         waypoints = []
-        waypoints.append([0., 0., 0.])
-        waypoints.append([4., 0., 1.])
-        waypoints.append([3., 2., 3.141592654])
-        waypoints.append([3., 3., 1.5707])
-        waypoints.append([2., 0., 0.])
+        if self.id == 1:
+            r = 3
+            for i in range(10):
+                interval = (2 * 3.141592654) / 10
+                point = [r * cos(interval * i), r * sin(interval * i), 0]
+                waypoints.append(point)
+        print(waypoints)
 
         rate = rospy.Rate(20)
         while not rospy.is_shutdown():
             dist = self.distance(desired, self.state)
+            hypo = self.distance(self.opp, self.state)
+            if hypo == 0.:
+                dira = 0
+            else:
+                dira = cos((self.opp[0] - self.state[0]) / hypo)
             temp = None
-            if self.model_distance(self.state, self.opp) > 2.:
+            if abs(dira - self.state[2]) > 0.1:
                 temp = [desired[0], desired[1]]
-                desired[0] = (self.state[0] + self.opp[0]) / 2.
-                desired[1] = (self.state[1] + self.opp[1]) / 2.
+                desired[0] = self.state[0]
+                desired[1] = self.state[1]
+                desired[2] = dira
             elif dist < 0.25 and waypoints:
                 wp = waypoints.pop()
-                desired[0] = wp[0] + off_x
-                desired[1] = wp[1] + off_y
-                desired[2] = wp[2] + off_yaw
+                #desired[0] = wp[0] + off_x
+                #desired[1] = wp[1] + off_y
+                desired[0] = wp[0]
+                desired[1] = wp[1]
+                desired[2] = dira
+            else:
+                desired[0] = self.state[0]
+                desired[1] = self.state[1]
+                desired[2] = dira
             des = DesiredCoordsRequest()
             des.data = desired
-            des.lock_yaw = False
+            des.lock_yaw = True
             req = self.des_srv(des)
             if temp:
                 desired[0] = temp[0]

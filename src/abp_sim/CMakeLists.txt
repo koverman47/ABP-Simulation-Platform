@@ -68,6 +68,7 @@ target_link_libraries(satlet_plugin ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES})
 add_service_files(
    FILES
    FloatSrv.srv
+   DesiredCoords.srv
 )
 
 ## Generate actions in the 'action' folder

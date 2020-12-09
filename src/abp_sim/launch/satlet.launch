@@ -8,6 +8,7 @@
 	<arg name="pose_yaw" default="0.0"/>
 	<arg name="delay" default="2.0"/>
 	<arg name="robot_id" default="0"/>
+	<arg name="run_cond" default="1"/>
 
 	<param name="robot_description" 
 		command="$(find xacro)/xacro --inorder '$(find abp_sim)/models/satlet_v1/satlet.sdf'"/>
@@ -26,7 +27,8 @@
 		name="controller_satlet$(arg robot_id)"
 		args="$(arg pose_x) $(arg pose_y) $(arg pose_yaw)"
 		launch-prefix="bash -c 'sleep $(arg delay); $0 $@'"
-		output="screen">
+		output="screen"
+		if="$(eval arg('run_cond') == '1')">
 	</node>
 
 	<node pkg="abp_sim"
@@ -34,7 +36,8 @@
 		name="planner_satlet$(arg robot_id)"
 		args="$(arg pose_x) $(arg pose_y) $(arg pose_yaw) $(arg robot_id)"
 		launch-prefix="bash -c 'sleep $(arg delay); $0 $@'"
-		output="screen">
+		output="screen"
+		if="$(eval arg('run_cond') == '1')">
 	</node>
 
 </launch>

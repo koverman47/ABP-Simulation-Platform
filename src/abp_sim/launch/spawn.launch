@@ -5,6 +5,7 @@
 	<arg name="pose_z" default="0.1"/>
 	<arg name="pose_yaw" default="0.0"/>
 	<arg name="robot_id" default="0"/>
+	<arg name="run_cond" default="1"/>
 
 	<group ns="satlet0">
 		<include file="$(find abp_sim)/launch/satlet.launch">
@@ -13,15 +14,27 @@
 			<arg name="pose_z" value="$(arg pose_z)"/>
 			<arg name="pose_yaw" value="$(arg pose_yaw)"/>
 			<arg name="robot_id" value="0"/>
+			<arg name="run_cond" value="0"/>
 		</include>
 	</group>
 	<group ns="satlet1">
 		<include file="$(find abp_sim)/launch/satlet.launch">
-			<arg name="pose_x" value="-2"/>
+			<arg name="pose_x" value="-3"/>
 			<arg name="pose_y" value="$(arg pose_y)"/>
 			<arg name="pose_z" value="$(arg pose_z)"/>
 			<arg name="pose_yaw" value="$(arg pose_yaw)"/>
 			<arg name="robot_id" value="1"/>
+			<arg name="run_cond" value="0"/>
+		</include>
+	</group>
+	<group ns="satlet2">
+		<include file="$(find abp_sim)/launch/satlet.launch">
+			<arg name="pose_x" value="3"/>
+			<arg name="pose_y" value="$(arg pose_y)"/>
+			<arg name="pose_z" value="$(arg pose_z)"/>
+			<arg name="pose_yaw" value="$(arg pose_yaw)"/>
+			<arg name="robot_id" value="2"/>
+			<arg name="run_cond" value="0"/>
 		</include>
 	</group>
 </launch>

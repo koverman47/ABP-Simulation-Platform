@@ -37,7 +37,7 @@ source ~/.bashrc
 ## Running a Toy Simulation
 ```bash
 cd src/abp_sim/
-./abp 3 --build
+./abp 3 --toy --build
 ```
 If everything is installed properly, you should initially see three floatboats at rest as seen in the above image.
 

@@ -9,6 +9,7 @@
 DYNAMICS=false
 BUILD=false
 HELP=false
+TOY=false
 
 if [ $# -ge 1 ]
 then
@@ -24,6 +25,9 @@ then
 			-h|--help)
 				HELP=true
 			;;
+			-t|--toy)
+				TOY=true
+			;;
 		esac
 	done
 else
@@ -36,11 +40,16 @@ then
 
 Options:
 	-h, --help      : Help string
+	-t, --toy       : Run a toy example
 	-b, --build     : Build ROS workspace
 	-d, --dynamics  : Use full physics
 "
 else
-	if $DYNAMICS
+	if $TOY
+	then
+		echo "Running toy example"
+		python generators/generate_toy.py $1
+	elif $DYNAMICS
 	then
 		python generators/generate_satletv2.py $1
 	else

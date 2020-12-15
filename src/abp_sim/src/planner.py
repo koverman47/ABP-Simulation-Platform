@@ -50,7 +50,6 @@ class Planner():
 
 
     def distance(self, u, v):
-        #return sqrt((u[0] - v[0])**2 + (u[1] - v[1])**2)
         x = u[0] - v[0]
         y = u[1] - v[1]
         yaw = u[2] - v[2]

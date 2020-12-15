@@ -1027,5 +1027,6 @@
     </joint>
     <static>0</static>
     <allow_auto_disable>1</allow_auto_disable>
+	<plugin name="satlet_control_interface" filename="libsatlet_plugin.so"/>
   </model>
 </sdf>
